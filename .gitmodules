@@ -1,0 +1,3 @@
+[submodule "vendor/lvk"]
+	path = vendor/lvk
+	url = https://github.com/corporateshark/lightweightvk.git

@@ -19,8 +19,16 @@ Camera::Camera(const glm::vec3& position, const glm::vec3& target)
 void Camera::assignWindowObject(GLFWwindow* window)
 {
 	glfwSetWindowUserPointer(window, this);
-
-	glfwSetInputMode(window, GLFW_CURSOR, GLFW_CURSOR_DISABLED);
+	glfwSetKeyCallback(window, [](GLFWwindow* window, int key, int scancode, int action, int mods)
+		{
+			if (key == GLFW_KEY_LEFT_CONTROL && action == GLFW_PRESS)
+			{
+				// retrieve your camera pointer stored in the window
+				Camera* camera = static_cast<Camera*>(glfwGetWindowUserPointer(window));
+				camera->cursorVisible = !camera->cursorVisible;
+				glfwSetInputMode(window, GLFW_CURSOR, camera->cursorVisible ? GLFW_CURSOR_NORMAL : GLFW_CURSOR_DISABLED);
+			}
+		});
 }
 
 void Camera::setAspectRatio(float ratio)
@@ -62,12 +70,15 @@ void Camera::handleInput(GLFWwindow* window, float deltaTime)
 
 	float xOffset = (float)(mouseX - lastMouseX) * sensitivity;
 	float yOffset = (float)(lastMouseY - mouseY) * sensitivity; // inverted Y
-	
+
 	lastMouseX = static_cast<float>(mouseX);
 	lastMouseY = static_cast<float>(mouseY);
 
-	yawDesired += xOffset;
-	pitchDesired += yOffset;
+	if (!cursorVisible)
+	{
+		yawDesired += xOffset;
+		pitchDesired += yOffset;
+	}
 	pitchDesired = glm::clamp(pitchDesired, -89.0f, 89.0f); // prevent flipping
 
 	// Smoothly interpolate current toward desired:

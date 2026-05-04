@@ -13,13 +13,13 @@ void main() {
     vec2 centered = vUV * 2.0 - 1.0;
 
     // Chromatic aberration
-    vec2 offset = centered * 0.003f;
+    vec2 offset = centered * pc.chromaticAberrationStrength;
     float r = textureBindless2D(pc.outputTexId, 0, vUV + offset).r;
     float g = textureBindless2D(pc.outputTexId, 0, vUV).g;
     float b = textureBindless2D(pc.outputTexId, 0, vUV - offset).b;
     color = vec4(r, g, b, 1.0);
 
-    float exposure = 1.5f; // tweak this
+    float exposure = pc.exposure; // tweak this
     color.rgb *= exposure;
     color.rgb = color.rgb / (color.rgb + vec3(1.0)); // Reinhard
     color.rgb = pow(color.rgb, vec3(1.0 / 2.2));     // Gamma

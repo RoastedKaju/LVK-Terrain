@@ -32,5 +32,7 @@ struct UniformData
 	glm::mat4 proj;
 	glm::vec4 color;
 	glm::vec4 cameraPosition;
+	float chromaticAberrationStrength;
+	float exposure;
 	uint32_t outputTexId;
 };

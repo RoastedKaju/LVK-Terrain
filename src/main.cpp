@@ -2,6 +2,7 @@
 #include <memory>
 
 #include <lvk/LVK.h>
+#include <lvk/HelpersImGui.h>
 #include <GLFW/glfw3.h>
 
 #include "shader.h"
@@ -10,15 +11,49 @@
 #include "camera.h"
 #include "terrain.h"
 
-// TODO: add Imgui and hook up post process and lighting variables
-// TODO: Heightmaps for terrain
+// TODO: New terrain shader for greyscale
+// TODO: Research procedural terrain generation and implement one algorithm
+// TODO: Texturing Terrain
+
 
 static bool resized = false;
 static bool showWireframe = true;
+static bool drawMesh = false;
+static float chromaticAberrationStrength = 0.003f;
+static float exposure = 1.5f;
+
+static void renderGui(lvk::ImGuiRenderer& imgui, lvk::Framebuffer& framebuff, lvk::ICommandBuffer& cmdBuff)
+{
+	imgui.beginFrame(framebuff);
+	{
+		ImGui::Begin("Test");
+		ImGui::Checkbox("Draw Mesh", &drawMesh);
+		ImGui::Checkbox("Show Wireframe", &showWireframe);
+		ImGui::SliderFloat("Chromatic Aberration", &chromaticAberrationStrength, 0.0f, 0.1f);
+		ImGui::SliderFloat("Exposure", &exposure, 0.0f, 10.0f);
+		ImGui::End();
+	}
+	imgui.endFrame(cmdBuff);
+}
 
 static void onFrameBufferResize(GLFWwindow* window, int width, int height)
 {
 	resized = true;
+}
+
+static void setMouseCallbacks(GLFWwindow* window)
+{
+	glfwSetCursorPosCallback(window, [](auto* window, double x, double y) { ImGui::GetIO().MousePos = ImVec2((float)x, (float)y); });
+	glfwSetMouseButtonCallback(window, [](auto* window, int button, int action, int mods) {
+		double xpos, ypos;
+		glfwGetCursorPos(window, &xpos, &ypos);
+		const ImGuiMouseButton_ imguiButton = (button == GLFW_MOUSE_BUTTON_LEFT)
+			? ImGuiMouseButton_Left
+			: (button == GLFW_MOUSE_BUTTON_RIGHT ? ImGuiMouseButton_Right : ImGuiMouseButton_Middle);
+		ImGuiIO& io = ImGui::GetIO();
+		io.MousePos = ImVec2((float)xpos, (float)ypos);
+		io.MouseDown[imguiButton] = action == GLFW_PRESS;
+		});
 }
 
 int main()
@@ -43,6 +78,10 @@ int main()
 		config.presentModes[0] = lvk::PresentMode_FIFO;
 
 		std::unique_ptr<lvk::IContext> ctx = lvk::createVulkanContextWithSwapchain(window, width, height, config);
+
+		std::unique_ptr<lvk::ImGuiRenderer> imGuiCtx = std::make_unique<lvk::ImGuiRenderer>(*ctx, window, nullptr, 13.0f);
+
+		setMouseCallbacks(window);
 
 		// shaders
 		lvk::Holder<lvk::ShaderModuleHandle> vertShader = ShaderProcessor::loadShaderModule(*ctx, (std::string(SHADERS_DIR) + "/default.vert").c_str());
@@ -145,7 +184,7 @@ int main()
 			nullptr);
 
 		// Camera
-		Camera cam{ glm::vec3(0.0f, 1.0f, 0.75f), glm::vec3(0.0f, 0.1f, 0.0f) };
+		Camera cam{ glm::vec3(0.0f, 1.0f, 0.75f), glm::vec3(0.0f, 0.0f, 0.0f) };
 		cam.assignWindowObject(window);
 
 		double timeStamp = glfwGetTime();
@@ -201,6 +240,8 @@ int main()
 			uniformData.model = model;
 			uniformData.view = cam.getViewMatrix();
 			uniformData.proj = cam.getProjMatrix();
+			uniformData.chromaticAberrationStrength = chromaticAberrationStrength;
+			uniformData.exposure = exposure;
 			uniformData.outputTexId = offScreenTexture.index();
 
 			// 1st Pass
@@ -231,7 +272,8 @@ int main()
 				cmd.cmdBindDepthState({ .compareOp = lvk::CompareOp_Less, .isDepthWriteEnabled = true });
 				{
 					cmd.cmdPushConstants(ctx->gpuAddress(uniformBuf));
-					//cmd.cmdDrawIndexed((uint32_t)terrain.getTerrainData().indices.size());
+					if (drawMesh)
+						cmd.cmdDrawIndexed((uint32_t)terrain.getTerrainData().indices.size());
 				}
 
 				if (showWireframe)
@@ -259,6 +301,9 @@ int main()
 				cmd.cmdBindDepthState({ .compareOp = lvk::CompareOp_AlwaysPass, .isDepthWriteEnabled = false });
 				cmd.cmdDraw(3);
 			}
+
+			renderGui(*imGuiCtx, finalFrameBuf, cmd);
+
 			cmd.cmdPopDebugGroupLabel();
 			cmd.cmdEndRendering();
 

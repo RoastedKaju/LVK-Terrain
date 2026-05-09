@@ -11,10 +11,8 @@
 #include "camera.h"
 #include "terrain.h"
 
-// TODO: New terrain shader for greyscale
 // TODO: Research procedural terrain generation and implement one algorithm
 // TODO: Texturing Terrain
-
 
 static bool resized = false;
 static bool showWireframe = true;

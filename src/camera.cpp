@@ -61,7 +61,6 @@ void Camera::handleInput(GLFWwindow* window, float deltaTime)
 	static bool firstMove = true;
 	if (firstMove)
 	{
-		std::cout << mouseX << " :: " << mouseY << std::endl;
 		lastMouseX = static_cast<float>(mouseX);
 		lastMouseY = static_cast<float>(mouseY);
 		firstMove = false;

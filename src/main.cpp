@@ -11,8 +11,10 @@
 #include "camera.h"
 #include "terrain.h"
 
+// TODO: Regenerate terrain button after changing dimensions and scale
 // TODO: Research procedural terrain generation and implement one algorithm
 // TODO: Texturing Terrain
+// TODO: Chromatic Aberration might be buggy
 
 static bool resized = false;
 static bool showWireframe = true;
@@ -24,7 +26,7 @@ static void renderGui(lvk::ImGuiRenderer& imgui, lvk::Framebuffer& framebuff, lv
 {
 	imgui.beginFrame(framebuff);
 	{
-		ImGui::Begin("Test");
+		ImGui::Begin("Debug");
 		ImGui::Checkbox("Draw Mesh", &drawMesh);
 		ImGui::Checkbox("Show Wireframe", &showWireframe);
 		ImGui::SliderFloat("Chromatic Aberration", &chromaticAberrationStrength, 0.0f, 0.1f);
@@ -56,8 +58,8 @@ static void setMouseCallbacks(GLFWwindow* window)
 
 int main()
 {
-	int width = 800;
-	int height = 600;
+	int width = 1880;
+	int height = 1000;
 
 	GLFWwindow* window = lvk::initWindow("Terrain", width, height, true);
 	if (!window)

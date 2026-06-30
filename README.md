@@ -63,10 +63,6 @@ Current effects include:
 
 ## Technologies
 
-- C++
-- Vulkan
-- GLFW
-- GLM
-- ImGui
-- stb_image (heightmap loading)
-- LVK Rendering Framework
+Language: C++ 20
+Third-Party: LVK, GLM, GLFW, IMGUI
+Rendering API: Vulkan 1.4

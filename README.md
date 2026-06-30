@@ -23,7 +23,7 @@ A terrain rendering demo built with **LVK** that generates a 3D terrain mesh fro
 </p>
 
 <p align="center">
-  <img src="docs/wireframe_and_mesh.jpg" width="60%" />
+  <img src="docs/wireframe_and_mesh.jpg" width="48%" />
 </p>
 
 ## Rendering

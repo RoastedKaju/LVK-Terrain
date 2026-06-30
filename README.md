@@ -1,7 +1,8 @@
 # Terrain
 A terrain rendering demo built with **LVK** that generates a 3D terrain mesh from a heightmap, includes basic post process pass as well.  
-
-**Work In Progress**
+<p align="center">
+<b>**Work In Progress**</b>
+</p>
 
 ****
 

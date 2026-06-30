@@ -19,13 +19,14 @@ A terrain rendering demo built with **LVK** that generates a 3D terrain mesh fro
 
 ## Screenshots
 <p align="center">
-  <img src="docs/mesh.jpg" width="48%" />
-  <img src="docs/wireframe.jpg" width="48%" />
+  <img src="docs/mesh.jpg" width="48%" style="border: 2px solid black;" />
+  <img src="docs/wireframe.jpg" width="48%" style="border: 2px solid black;" />
 </p>
 
 <p align="center">
-  <img src="docs/wireframe_and_mesh.jpg" width="48%" />
+  <img src="docs/wireframe_and_mesh.jpg" width="48%" style="border: 2px solid black;" />
 </p>
+
 
 ## Rendering
 
@@ -53,6 +54,8 @@ Current effects include:
 
 ## Controls
 
+<p align = center>
+
 | Action | Input |
 |---------|-------|
 | Move Camera | WASD |
@@ -62,8 +65,10 @@ Current effects include:
 | Exposure | ImGui Slider |
 | Chromatic Aberration | ImGui Slider |
 
+</p>
+
 ## Technologies
 
-Language: C++ 20
-Third-Party: LVK, GLM, GLFW, IMGUI
-Rendering API: Vulkan 1.4
+**Language**: C++ 20  
+**Third-Party**: [LVK](https://github.com/corporateshark/lightweightvk), [GLM](https://github.com/g-truc/glm), [GLFW](https://github.com/glfw/glfw), [ImGui](https://github.com/ocornut/imgui)  
+**Rendering API**: Vulkan 1.4

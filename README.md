@@ -54,18 +54,39 @@ Current effects include:
 
 ## Controls
 
-<p align = center>
-
-| Action | Input |
-|---------|-------|
-| Move Camera | WASD |
-| Look Around | Mouse |
-| Toggle Wireframe | ImGui |
-| Draw Filled Mesh | ImGui |
-| Exposure | ImGui Slider |
-| Chromatic Aberration | ImGui Slider |
-
+<p align="center">
+  <table border="1" cellpadding="8" cellspacing="0">
+    <tr>
+      <th>Action</th>
+      <th>Input</th>
+    </tr>
+    <tr>
+      <td>Move Camera</td>
+      <td>WASD</td>
+    </tr>
+    <tr>
+      <td>Look Around</td>
+      <td>Mouse</td>
+    </tr>
+    <tr>
+      <td>Toggle Wireframe</td>
+      <td>ImGui</td>
+    </tr>
+    <tr>
+      <td>Draw Filled Mesh</td>
+      <td>ImGui</td>
+    </tr>
+    <tr>
+      <td>Exposure</td>
+      <td>ImGui Slider</td>
+    </tr>
+    <tr>
+      <td>Chromatic Aberration</td>
+      <td>ImGui Slider</td>
+    </tr>
+  </table>
 </p>
+
 
 ## Technologies
 
